@@ -1,9 +1,10 @@
-package com.example.apipedidos.daos;
+package com.example.apipedidos.repository;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CaixaDAO {
+@Repository
+public class CaixaRepository {
 
     private double valorEmCaixa = 0;
 

@@ -15,7 +15,6 @@ package com.example.apipedidos.models;
 import java.util.List;
 
 public class Pedido {
-
     private int id;
     private int mesa;
     private List<Prato> pratos;
@@ -26,7 +25,7 @@ public class Pedido {
         this.pratos = pratos;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -36,5 +35,17 @@ public class Pedido {
 
     public List<Prato> getPratos() {
         return pratos;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setMesa(int mesa) {
+        this.mesa = mesa;
+    }
+
+    public void setPratos(List<Prato> pratos) {
+        this.pratos = pratos;
     }
 }

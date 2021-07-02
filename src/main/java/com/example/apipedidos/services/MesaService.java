@@ -1,7 +1,7 @@
 package com.example.apipedidos.services;
 
-import com.example.apipedidos.daos.CaixaDAO;
-import com.example.apipedidos.daos.MesasDAO;
+import com.example.apipedidos.repository.CaixaRepository;
+import com.example.apipedidos.dao.MesaDao;
 import com.example.apipedidos.dtos.CaixaDTO;
 import com.example.apipedidos.dtos.NotaFiscalDTO;
 import com.example.apipedidos.exceptions.NotFoundException;
@@ -11,24 +11,35 @@ import com.example.apipedidos.models.Prato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
-public class RestauranteService {
+public class MesaService {
 
-    private MesasDAO mesasDAO;
-    private CaixaDAO caixaDAO;
+    private MesaDao mesaDao;
+    private CaixaRepository caixaRepository;
 
     @Autowired
-    public RestauranteService(MesasDAO mesasDAO, CaixaDAO caixaDAO) {
-        this.mesasDAO = mesasDAO;
-        this.caixaDAO = caixaDAO;
+    public MesaService(MesaDao mesaDao, CaixaRepository caixaRepository) {
+        this.mesaDao = mesaDao;
+        this.caixaRepository = caixaRepository;
     }
 
-    public NotaFiscalDTO pedidosPorMesa (int id) {
-        Mesa mesa = mesasDAO.getMesaById(id);
+    public Mesa criaMesa(Mesa mesa) {
+        try {
+            mesa = mesaDao.persisteMesa(mesa);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return mesa;
+    }
+
+    public NotaFiscalDTO pedidosPorMesa(int id) {
+        Mesa mesa = mesaDao.getMesaById(id);
         validaMesa(mesa);
 
         List<Prato> pratos = new ArrayList();
@@ -40,21 +51,21 @@ public class RestauranteService {
         return new NotaFiscalDTO(pratos, mesa.getValorTotalConsumido());
     }
 
-    public void fecharMesa (int mesaId) {
-        Mesa mesa = mesasDAO.getMesaById(mesaId);
+    public void fecharMesa(int mesaId) {
+        Mesa mesa = mesaDao.getMesaById(mesaId);
         validaMesa(mesa);
 
-        caixaDAO.setValorEmCaixa(caixaDAO.getValorEmCaixa() + mesa.getValorTotalConsumido());
+        caixaRepository.setValorEmCaixa(caixaRepository.getValorEmCaixa() + mesa.getValorTotalConsumido());
         mesa.limparMesa();
-        mesasDAO.atualizaMesa(mesaId, mesa);
+//        mesasRepository.atualizaMesa(mesaId, mesa);
     }
 
     public CaixaDTO retornaValorCaixa() {
-        return new CaixaDTO(caixaDAO.getValorEmCaixa());
+        return new CaixaDTO(caixaRepository.getValorEmCaixa());
     }
 
     private void validaMesa(Mesa mesa) {
-        if(Objects.isNull(mesa)) {
+        if (Objects.isNull(mesa)) {
             throw new NotFoundException("Mesa não encontrada");
         }
     }

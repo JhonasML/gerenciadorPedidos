@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Mesa {
 
-    private int id;
+    private Integer id;
     private List<Pedido> pedidos;
     private double valorTotalConsumido;
 
@@ -14,7 +14,7 @@ public class Mesa {
         this.valorTotalConsumido = totalConsumido;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -41,5 +41,20 @@ public class Mesa {
     public void limparMesa() {
         this.pedidos = new ArrayList<Pedido>();
         this.valorTotalConsumido = 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mesa)) return false;
+
+        Mesa mesa = (Mesa) o;
+
+        return getId().equals(mesa.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }
