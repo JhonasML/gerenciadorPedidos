@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Repository
 public class PedidosRepository {
@@ -68,12 +67,33 @@ public class PedidosRepository {
         return pedidos;
     }
 
-//    public Pedido update(Pedido pedido) {
-//
-//    }
-//
-//    public Pedido delete(Long id) {
-//
-//    }
+    public Pedido update(Integer id, Pedido pedido) throws IOException {
+        List<Mesa> mesas = mesaDao.findMesas();
+
+        pedido.setId(id);
+        for (Mesa mesa : mesas) {
+            if (mesa.getPedidos().contains(pedido)) {
+                mesa.getPedidos().remove(pedido);
+                mesa.getPedidos().add(pedido);
+
+                mesaDao.atualizaMesa(mesa.getId(), mesa);
+            }
+        }
+
+        return pedido;
+    }
+
+    public void delete(Integer id) throws IOException {
+        List<Mesa> mesas = mesaDao.findMesas();
+        var pedido = new Pedido(id);
+
+        for (Mesa mesa : mesas) {
+            if (mesa.getPedidos().contains(pedido)) {
+                mesa.getPedidos().remove(pedido);
+
+                mesaDao.atualizaMesa(mesa.getId(), mesa);
+            }
+        }
+    }
 
 }

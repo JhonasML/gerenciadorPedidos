@@ -12,12 +12,19 @@ package com.example.apipedidos.models;
 //        7. Você deve ser capaz de consultar o valor em caixa
 //        Utilize as estruturas aprendidas até aqui para realizar a tarefa proposta.
 
+import java.util.Date;
 import java.util.List;
 
 public class Pedido {
     private int id;
     private int mesa;
     private List<Prato> pratos;
+    private boolean ativo;
+    private Date data;
+
+    public Pedido(int id) {
+        this.id = id;
+    }
 
     public Pedido(int id, int mesa, List<Prato> pratos) {
         this.id = id;
@@ -47,5 +54,36 @@ public class Pedido {
 
     public void setPratos(List<Prato> pratos) {
         this.pratos = pratos;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pedido)) return false;
+
+        Pedido pedido = (Pedido) o;
+
+        return getId().equals(pedido.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }

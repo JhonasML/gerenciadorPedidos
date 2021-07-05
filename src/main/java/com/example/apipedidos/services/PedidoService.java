@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class PedidoService {
@@ -21,7 +22,19 @@ public class PedidoService {
         return pedidosRepository.create(pedido);
     }
 
-    public Pedido obterPedido(Integer id) {
+    public Pedido obterPedidoPorId(Integer id) {
         return pedidosRepository.findById(id);
+    }
+
+    public List<Pedido> obterPedidos() {
+        return pedidosRepository.find();
+    }
+
+    public Pedido alterar(Integer id, Pedido pedido) throws IOException {
+        return pedidosRepository.update(id, pedido);
+    }
+
+    public void delete(Integer id) throws IOException {
+        pedidosRepository.delete(id);
     }
 }
